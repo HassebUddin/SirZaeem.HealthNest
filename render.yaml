@@ -6,10 +6,26 @@ services:
     dockerContext: ./backend/HealthNest.Api
     plan: free
     envVars:
-      - key: ConnectionStrings__DefaultConnection
+      - key: DB_HOST
         fromDatabase:
           name: healthnest-db
-          property: connectionString
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: healthnest-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: healthnest-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: healthnest-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: healthnest-db
+          property: password
       - key: Jwt__Issuer
         value: SirZaeem.HealthNest
       - key: Jwt__Audience

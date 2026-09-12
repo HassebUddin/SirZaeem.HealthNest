@@ -21,8 +21,17 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter()));
 builder.Services.AddOpenApi();
 
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+var connectionString = !string.IsNullOrEmpty(dbHost)
+    ? $"Host={dbHost};Port={Environment.GetEnvironmentVariable("DB_PORT")};" +
+      $"Database={Environment.GetEnvironmentVariable("DB_NAME")};" +
+      $"Username={Environment.GetEnvironmentVariable("DB_USER")};" +
+      $"Password={Environment.GetEnvironmentVariable("DB_PASSWORD")};" +
+      "SSL Mode=Require;Trust Server Certificate=true"
+    : builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddSignalR();
 
