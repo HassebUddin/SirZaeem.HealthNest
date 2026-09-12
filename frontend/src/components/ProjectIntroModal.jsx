@@ -15,7 +15,7 @@ const SUPERVISOR = {
 const TEAM = [
   {
     name: 'Haseeb Uddin',
-    id: 'B2210006053',
+    id: 'B22110006053',
     detail: 'Senior Software Engineer (.NET / React)',
     company: 'Logicose Pvt Ltd',
     companyLogo: LOGICOSE_LOGO,
@@ -24,7 +24,7 @@ const TEAM = [
   },
   {
     name: 'Daniyal Ahmed',
-    id: 'B21110006024',
+    id: 'B22110006024',
     detail: 'Student at UBIT',
     image: null
   }
