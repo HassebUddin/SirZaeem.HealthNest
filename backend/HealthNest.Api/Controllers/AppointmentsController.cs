@@ -122,7 +122,7 @@ public class AppointmentsController : ControllerBase
             .Include(a => a.Patient)
             .FirstOrDefaultAsync(a => a.Id == id);
 
-        if (appointment is null) return NotFound();
+        if (appointment is null) return NotFound("Appointment not found.");
 
         appointment.Status = status;
         if (status == AppointmentStatus.Cancelled)

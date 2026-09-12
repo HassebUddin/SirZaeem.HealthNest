@@ -16,7 +16,7 @@ const TEAM = [
   {
     name: 'Haseeb Uddin',
     id: 'B2210006053',
-    detail: 'Senior Software Engineer (.NET / Angular)',
+    detail: 'Senior Software Engineer (.NET / React)',
     company: 'Logicose Pvt Ltd',
     companyLogo: LOGICOSE_LOGO,
     image: 'https://scontent-ams2-1.cdninstagram.com/v/t51.82787-19/753282262_17898099765516129_6817168787032967633_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_cat=100&ccb=7-5&_nc_sid=f7ccc5&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy45OTIuQzMifQ%3D%3D&_nc_ohc=GFrriF4IWqoQ7kNvwEOJL4A&_nc_oc=AdoaGmXMvcIl-nLIr5TvKUvYaCGDIjkZgJhwDwcWwYOWLuaUKIJreBRBTdLUo389UUw&_nc_zt=24&_nc_ht=scontent-ams2-1.cdninstagram.com&_nc_gid=3trgi2F75Jbsqrmk6SBNAQ&_nc_ss=7baaf&oh=00_AQLe_92nNqsrOZrcMvfRSWceriKg-acyKIxAhtojfF7kRA&oe=6AAB8866',
