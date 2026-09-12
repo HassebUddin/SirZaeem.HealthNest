@@ -1,4 +1,16 @@
+using HealthNest.Api.Models;
+
 namespace HealthNest.Api.DTOs;
+
+public record CreateDoctorRequest(
+    string FullName,
+    string Email,
+    string Password,
+    string Specialization,
+    decimal ConsultationFee,
+    string? Bio,
+    SubscriptionPlan Plan
+);
 
 public record AdminDoctorDto(
     int DoctorProfileId,

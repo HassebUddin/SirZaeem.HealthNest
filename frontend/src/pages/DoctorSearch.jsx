@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FaUserDoctor, FaCircleCheck, FaClock, FaStethoscope, FaShieldHeart, FaBolt } from 'react-icons/fa6'
+import { FaUserDoctor, FaCircleCheck, FaClock, FaStethoscope, FaShieldHeart, FaBolt, FaXmark } from 'react-icons/fa6'
 import { FaSearch } from 'react-icons/fa'
 import api from '../api/client'
 import { useSignalR } from '../context/SignalRContext'
 import { photoForDoctor } from '../utils/doctorPhotos'
+
+const FILTERS = ['All', 'Available', 'Booked']
 
 export default function DoctorSearch() {
   const [doctors, setDoctors] = useState([])
@@ -13,6 +15,7 @@ export default function DoctorSearch() {
   const [slots, setSlots] = useState([])
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(true)
+  const [filter, setFilter] = useState('All')
   const connection = useSignalR()
 
   const loadDoctors = async () => {
@@ -43,8 +46,15 @@ export default function DoctorSearch() {
   const viewSlots = async (doctor) => {
     setSelectedDoctor(doctor)
     setMessage('')
+    setFilter('All')
     const { data } = await api.get(`/doctors/${doctor.doctorProfileId}/slots`)
     setSlots(data)
+  }
+
+  const closeModal = () => {
+    setSelectedDoctor(null)
+    setSlots([])
+    setMessage('')
   }
 
   const book = async (slotId) => {
@@ -57,6 +67,15 @@ export default function DoctorSearch() {
       setMessage(err.response?.data ?? 'Booking failed')
     }
   }
+
+  const filteredSlots = useMemo(() => {
+    if (filter === 'Available') return slots.filter((s) => !s.isBooked)
+    if (filter === 'Booked') return slots.filter((s) => s.isBooked)
+    return slots
+  }, [slots, filter])
+
+  const availableCount = slots.filter((s) => !s.isBooked).length
+  const bookedCount = slots.filter((s) => s.isBooked).length
 
   return (
     <div className="page">
@@ -112,7 +131,7 @@ export default function DoctorSearch() {
                 whileHover={{ y: -4 }}
               >
                 <div className="doctor-photo">
-                  <img src={photoForDoctor(d.fullName)} alt={d.fullName} loading="lazy" />
+                  <img src={photoForDoctor(d.doctorProfileId)} alt={d.fullName} loading="lazy" />
                   <span className={`plan-badge ${d.plan.toLowerCase()}`}>{d.plan}</span>
                 </div>
                 <h3>{d.fullName}</h3>
@@ -127,39 +146,76 @@ export default function DoctorSearch() {
       <AnimatePresence>
         {selectedDoctor && (
           <motion.div
-            className="slots-panel"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
+            className="modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeModal}
           >
-            <h3><FaClock /> Available Slots — {selectedDoctor.fullName}</h3>
-            {message && (
-              <p className={message.includes('success') ? 'success-banner' : 'error-text'}>
-                {message.includes('success') && <FaCircleCheck />} {message}
-              </p>
-            )}
-            {slots.length === 0 ? (
-              <div className="empty-state">
-                <FaClock />
-                <p>No upcoming slots available.</p>
+            <motion.div
+              className="modal-panel"
+              initial={{ opacity: 0, y: 30, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.96 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="modal-close" onClick={closeModal} aria-label="Close"><FaXmark /></button>
+
+              <div className="modal-doctor-header">
+                <img src={photoForDoctor(selectedDoctor.doctorProfileId)} alt={selectedDoctor.fullName} className="modal-doctor-photo" />
+                <div>
+                  <h3>{selectedDoctor.fullName}</h3>
+                  <p className="doctor-spec">{selectedDoctor.specialization}</p>
+                  <span className={`plan-badge ${selectedDoctor.plan.toLowerCase()}`}>{selectedDoctor.plan}</span>
+                </div>
               </div>
-            ) : (
-              <div className="slots-grid">
-                {slots.map((s) => (
-                  <div key={s.id} className={`slot-chip ${s.isBooked ? 'booked' : ''}`}>
-                    <div className="slot-time">
-                      <strong>{new Date(s.startTime).toLocaleDateString()}</strong>
-                      <span>{new Date(s.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(s.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                    </div>
-                    {s.isBooked ? (
-                      <span className="status-pill cancelled">Booked</span>
-                    ) : (
-                      <button onClick={() => book(s.id)}>Book</button>
-                    )}
-                  </div>
+
+              {message && (
+                <p className={message.includes('success') ? 'success-banner' : 'error-text'}>
+                  {message.includes('success') && <FaCircleCheck />} {message}
+                </p>
+              )}
+
+              <div className="filter-tabs">
+                {FILTERS.map((f) => (
+                  <button
+                    key={f}
+                    className={`filter-tab ${filter === f ? 'active' : ''}`}
+                    onClick={() => setFilter(f)}
+                  >
+                    {f}
+                    {f === 'Available' && ` (${availableCount})`}
+                    {f === 'Booked' && ` (${bookedCount})`}
+                  </button>
                 ))}
               </div>
-            )}
+
+              <div className="modal-body">
+                {filteredSlots.length === 0 ? (
+                  <div className="empty-state">
+                    <FaClock />
+                    <p>No {filter !== 'All' ? filter.toLowerCase() : 'upcoming'} slots.</p>
+                  </div>
+                ) : (
+                  <div className="slots-grid">
+                    {filteredSlots.map((s) => (
+                      <div key={s.id} className={`slot-chip ${s.isBooked ? 'booked' : ''}`}>
+                        <div className="slot-time">
+                          <strong>{new Date(s.startTime).toLocaleDateString()}</strong>
+                          <span>{new Date(s.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(s.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
+                        {s.isBooked ? (
+                          <span className="status-pill cancelled">Booked</span>
+                        ) : (
+                          <button onClick={() => book(s.id)}>Book</button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

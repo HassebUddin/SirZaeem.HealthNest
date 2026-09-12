@@ -16,6 +16,9 @@ export default function Contact() {
   return (
     <div className="page-static">
       <section className="static-hero">
+        <span className="static-hero-glow one" />
+        <span className="static-hero-glow two" />
+        <span className="static-hero-glow three" />
         <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <span className="eyebrow light">Contact Us</span>
           <h1>We'd love to hear from you</h1>
@@ -27,7 +30,7 @@ export default function Contact() {
         <div className="contact-grid">
           <motion.div className="contact-info" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
             <div className="contact-image">
-              <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop" alt="Support team" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=800&auto=format&fit=crop" alt="Support team" loading="lazy" />
             </div>
             <div className="contact-info-item">
               <span className="form-icon-wrap"><FaEnvelope /></span>
@@ -47,7 +50,7 @@ export default function Contact() {
               <span className="form-icon-wrap"><FaLocationDot /></span>
               <div>
                 <strong>Location</strong>
-                <span>Lahore, Pakistan</span>
+                <span>Karachi, Pakistan</span>
               </div>
             </div>
           </motion.div>
@@ -84,6 +87,20 @@ export default function Contact() {
             </form>
           </motion.div>
         </div>
+
+        <motion.div
+          className="contact-map"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.15 }}
+        >
+          <img src="https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?q=80&w=1400&auto=format&fit=crop" alt="HealthNest office location" loading="lazy" />
+          <div className="contact-map-overlay">
+            <FaLocationDot />
+            <span>Find us in Karachi, Pakistan</span>
+          </div>
+        </motion.div>
       </section>
     </div>
   )

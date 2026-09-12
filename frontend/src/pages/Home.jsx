@@ -11,12 +11,12 @@ import { photoForDoctor } from '../utils/doctorPhotos'
 
 const FEATURES = [
   {
-    image: 'https://images.unsplash.com/photo-1512428813834-c702c7702b78?q=80&w=600&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1520333789090-1afc82db536a?q=80&w=600&auto=format&fit=crop',
     title: 'Instant Booking',
     text: 'Real-time slot availability with live updates — no back-and-forth calls.'
   },
   {
-    image: 'https://images.unsplash.com/photo-1580654712603-eb43273aff33?q=80&w=600&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=600&auto=format&fit=crop',
     title: 'AI Symptom Checker',
     text: 'Describe your symptoms and get matched with the right specialist instantly.'
   },
@@ -26,7 +26,7 @@ const FEATURES = [
     text: 'Check in online and watch your position update in real time.'
   },
   {
-    image: 'https://images.unsplash.com/photo-1591343395082-e120087004b4?q=80&w=600&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=600&auto=format&fit=crop',
     title: 'Verified Doctors',
     text: 'Every doctor profile is reviewed so you always book with confidence.'
   }
@@ -155,7 +155,7 @@ export default function Home() {
             transition={{ duration: 0.6 }}
           >
             <img
-              src="https://images.unsplash.com/photo-1587559070757-f72a388edbba?q=80&w=1800&auto=format&fit=crop"
+              src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?q=80&w=1800&auto=format&fit=crop"
               alt="Our medical specialists"
               loading="lazy"
             />
@@ -178,7 +178,7 @@ export default function Home() {
                 whileHover={{ y: -6 }}
               >
                 <div className="doctor-photo">
-                  <img src={photoForDoctor(d.fullName)} alt={d.fullName} loading="lazy" />
+                  <img src={photoForDoctor(d.doctorProfileId)} alt={d.fullName} loading="lazy" />
                   <span className={`plan-badge ${d.plan.toLowerCase()}`}>{d.plan}</span>
                 </div>
                 <h3>{d.fullName}</h3>

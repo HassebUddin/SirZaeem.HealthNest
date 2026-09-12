@@ -88,7 +88,7 @@ export default function SymptomChecker() {
                     whileHover={{ y: -4 }}
                   >
                     <div className="doctor-photo">
-                      <img src={photoForDoctor(d.fullName)} alt={d.fullName} loading="lazy" />
+                      <img src={photoForDoctor(d.doctorProfileId)} alt={d.fullName} loading="lazy" />
                       <span className={`plan-badge ${d.plan.toLowerCase()}`}>{d.plan}</span>
                     </div>
                     <h3>{d.fullName}</h3>

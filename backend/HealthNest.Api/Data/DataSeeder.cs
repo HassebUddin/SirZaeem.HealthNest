@@ -31,6 +31,8 @@ public static class DataSeeder
 
     public static async Task SeedAsync(AppDbContext db)
     {
+        await RepairSlotConsistencyAsync(db);
+
         if (await db.DoctorProfiles.CountAsync() >= Doctors.Length)
             return;
 
@@ -149,6 +151,23 @@ public static class DataSeeder
                 }
             }
         }
+
+        await db.SaveChangesAsync();
+    }
+
+    private static async Task RepairSlotConsistencyAsync(AppDbContext db)
+    {
+        var bookedSlotIds = await db.Appointments.Select(a => a.TimeSlotId).ToListAsync();
+
+        var inconsistentSlots = await db.TimeSlots
+            .Where(t => !t.IsBooked && bookedSlotIds.Contains(t.Id))
+            .ToListAsync();
+
+        if (inconsistentSlots.Count == 0)
+            return;
+
+        foreach (var slot in inconsistentSlots)
+            slot.IsBooked = true;
 
         await db.SaveChangesAsync();
     }

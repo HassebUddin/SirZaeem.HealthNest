@@ -61,6 +61,9 @@ export default function SupportChatWidget() {
         className="chat-fab"
         onClick={() => setOpen((v) => !v)}
         whileTap={{ scale: 0.92 }}
+        whileHover={{ scale: 1.08 }}
+        animate={open ? { y: 0 } : { y: [0, -10, 0] }}
+        transition={open ? { duration: 0.2 } : { duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
         aria-label="Open support chat"
       >
         {open ? <HiOutlineXMark /> : <HiOutlineChatBubbleLeftRight />}

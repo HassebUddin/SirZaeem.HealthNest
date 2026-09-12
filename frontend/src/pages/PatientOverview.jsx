@@ -23,7 +23,7 @@ const BANNERS = [
   {
     title: 'Not feeling well?',
     text: 'Try our AI Symptom Checker to find the right specialist in seconds.',
-    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=1200&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1584634731339-252c581abfc5?q=80&w=1200&auto=format&fit=crop'
   }
 ]
 

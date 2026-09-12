@@ -6,6 +6,7 @@ import PublicNavbar from './components/PublicNavbar'
 import PublicFooter from './components/PublicFooter'
 import ProtectedRoute from './components/ProtectedRoute'
 import SupportChatWidget from './components/SupportChatWidget'
+import ProjectIntroModal from './components/ProjectIntroModal'
 import Home from './pages/Home'
 import About from './pages/About'
 import Contact from './pages/Contact'
@@ -193,6 +194,7 @@ export default function App() {
       <SignalRProvider>
         <BrowserRouter>
           <div className="app-shell">
+            <ProjectIntroModal />
             <AppShell />
           </div>
         </BrowserRouter>

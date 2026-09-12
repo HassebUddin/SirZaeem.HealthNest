@@ -35,7 +35,17 @@ public class AppointmentsController : ControllerBase
             .FirstOrDefaultAsync(t => t.Id == request.TimeSlotId);
 
         if (slot is null) return NotFound("Time slot not found.");
-        if (slot.IsBooked) return BadRequest("This slot is already booked.");
+
+        var alreadyBooked = await _db.Appointments.AnyAsync(a => a.TimeSlotId == slot.Id);
+        if (slot.IsBooked || alreadyBooked)
+        {
+            if (!slot.IsBooked)
+            {
+                slot.IsBooked = true;
+                await _db.SaveChangesAsync();
+            }
+            return BadRequest("This slot is already booked.");
+        }
 
         slot.IsBooked = true;
 
@@ -47,7 +57,15 @@ public class AppointmentsController : ControllerBase
         };
 
         _db.Appointments.Add(appointment);
-        await _db.SaveChangesAsync();
+
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            return BadRequest("This slot is already booked.");
+        }
 
         var patient = await _db.Users.FindAsync(CurrentUserId);
 

@@ -37,7 +37,7 @@ export default function PublicFooter() {
           <h4>Get in touch</h4>
           <span>support@healthnest.app</span>
           <span>+92 300 1234567</span>
-          <span>Lahore, Pakistan</span>
+          <span>Karachi, Pakistan</span>
         </div>
       </div>
 
