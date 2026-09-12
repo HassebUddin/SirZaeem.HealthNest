@@ -17,6 +17,43 @@
   border-radius: var(--radius-sm);
 }
 
+.theme-toggle {
+  background: var(--bg-alt);
+  color: var(--text);
+  box-shadow: none;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+.theme-toggle:hover {
+  background: var(--primary-glow);
+  color: var(--primary);
+  transform: rotate(15deg);
+  box-shadow: none;
+}
+
+.mobile-theme-toggle {
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-sm);
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  background: none;
+  color: var(--text);
+}
+
+.mobile-theme-toggle:hover {
+  transform: none;
+  background: var(--bg-alt);
+}
+
 .mobile-nav-drawer {
   position: fixed;
   top: 0;

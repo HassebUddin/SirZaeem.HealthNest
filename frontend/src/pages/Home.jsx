@@ -7,7 +7,27 @@ import {
 import { FaQuoteLeft } from 'react-icons/fa'
 import api from '../api/client'
 import HeroSlider from '../components/HeroSlider'
+import TiltCard from '../components/TiltCard'
+import InlineSymptomChecker from '../components/InlineSymptomChecker'
 import { photoForDoctor } from '../utils/doctorPhotos'
+import { useCountUp } from '../hooks/useCountUp'
+
+function CountStat({ target, decimals, suffix = '', label }) {
+  const [ref, display] = useCountUp(target, { decimals })
+  return (
+    <motion.div
+      ref={ref}
+      className="stat-block"
+      initial={{ opacity: 0, y: 18, scale: 0.85 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ type: 'spring', stiffness: 180, damping: 14 }}
+    >
+      <span className="stat-block-value">{display}{suffix}</span>
+      <span className="stat-block-label">{label}</span>
+    </motion.div>
+  )
+}
 
 const FEATURES = [
   {
@@ -62,24 +82,10 @@ export default function Home() {
         viewport={{ once: true }}
       >
         <div className="stats-strip-inner">
-          {[
-            { value: doctors.length > 0 ? '50+' : '—', label: <><FaUserDoctor /> Verified Doctors</> },
-            { value: '2,400+', label: <><FaCalendarCheck /> Appointments Booked</> },
-            { value: '12', label: <><FaChartLine /> Specializations</> },
-            { value: '4.8/5', label: <><FaStar /> Average Rating</> }
-          ].map((s, i) => (
-            <motion.div
-              key={i}
-              className="stat-block"
-              initial={{ opacity: 0, y: 18, scale: 0.85 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, type: 'spring', stiffness: 180, damping: 14 }}
-            >
-              <span className="stat-block-value">{s.value}</span>
-              <span className="stat-block-label">{s.label}</span>
-            </motion.div>
-          ))}
+          <CountStat target={50} suffix="+" label={<><FaUserDoctor /> Verified Doctors</>} />
+          <CountStat target={2400} suffix="+" label={<><FaCalendarCheck /> Appointments Booked</>} />
+          <CountStat target={12} label={<><FaChartLine /> Specializations</>} />
+          <CountStat target={4.8} decimals={1} suffix="/5" label={<><FaStar /> Average Rating</>} />
         </div>
       </motion.section>
 
@@ -121,6 +127,23 @@ export default function Home() {
             </motion.div>
           </motion.div>
         </div>
+      </section>
+
+      <section className="page section-narrow">
+        <div className="section-heading">
+          <span className="eyebrow"><FaStethoscope /> AI-Powered</span>
+          <h2>Not sure who to see?</h2>
+          <p className="subtitle">Our AI Symptom Checker works right here — describe how you feel and get an instant recommendation.</p>
+        </div>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.5 }}
+          style={{ maxWidth: 640, margin: '0 auto' }}
+        >
+          <InlineSymptomChecker />
+        </motion.div>
       </section>
 
       <section className="page section-narrow">
@@ -170,20 +193,20 @@ export default function Home() {
             {doctors.map((d, i) => (
               <motion.div
                 key={d.doctorProfileId}
-                className="doctor-card"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.3 }}
                 transition={{ delay: i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -6 }}
               >
-                <div className="doctor-photo">
-                  <img src={photoForDoctor(d.doctorProfileId)} alt={d.fullName} loading="lazy" />
-                  <span className={`plan-badge ${d.plan.toLowerCase()}`}>{d.plan}</span>
-                </div>
-                <h3>{d.fullName}</h3>
-                <p className="doctor-spec">{d.specialization}</p>
-                <p className="doctor-fee">Fee: ${d.consultationFee}</p>
+                <TiltCard className="doctor-card">
+                  <div className="doctor-photo">
+                    <img src={photoForDoctor(d.doctorProfileId)} alt={d.fullName} loading="lazy" />
+                    <span className={`plan-badge ${d.plan.toLowerCase()}`}>{d.plan}</span>
+                  </div>
+                  <h3>{d.fullName}</h3>
+                  <p className="doctor-spec">{d.specialization}</p>
+                  <p className="doctor-fee">Fee: ${d.consultationFee}</p>
+                </TiltCard>
               </motion.div>
             ))}
           </div>

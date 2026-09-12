@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FaHeartPulse } from 'react-icons/fa6'
+import { FaHeartPulse, FaMoon, FaSun } from 'react-icons/fa6'
 import { FaBars, FaTimes } from 'react-icons/fa'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../context/ThemeContext'
 
 const LINKS = [
   { to: '/', label: 'Home', end: true },
@@ -15,6 +16,7 @@ const LINKS = [
 
 export default function PublicNavbar() {
   const { user } = useAuth()
+  const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
 
@@ -33,6 +35,10 @@ export default function PublicNavbar() {
             {l.label}
           </NavLink>
         ))}
+
+        <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
+          {theme === 'dark' ? <FaSun /> : <FaMoon />}
+        </button>
 
         {!user ? (
           <>
@@ -63,6 +69,9 @@ export default function PublicNavbar() {
                 {l.label}
               </NavLink>
             ))}
+            <button className="theme-toggle mobile-theme-toggle" onClick={toggleTheme}>
+              {theme === 'dark' ? <><FaSun /> Light Mode</> : <><FaMoon /> Dark Mode</>}
+            </button>
             {!user ? (
               <>
                 <Link to="/login" onClick={() => setOpen(false)}>Login</Link>

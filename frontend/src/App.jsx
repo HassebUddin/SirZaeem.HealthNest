@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { AuthProvider } from './context/AuthContext'
 import { SignalRProvider } from './context/SignalRContext'
+import { ThemeProvider } from './context/ThemeContext'
 import PublicNavbar from './components/PublicNavbar'
 import PublicFooter from './components/PublicFooter'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -190,15 +191,17 @@ function AppShell() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <SignalRProvider>
-        <BrowserRouter>
-          <div className="app-shell">
-            <ProjectIntroModal />
-            <AppShell />
-          </div>
-        </BrowserRouter>
-      </SignalRProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <SignalRProvider>
+          <BrowserRouter>
+            <div className="app-shell">
+              <ProjectIntroModal />
+              <AppShell />
+            </div>
+          </BrowserRouter>
+        </SignalRProvider>
+      </AuthProvider>
+    </ThemeProvider>
   )
 }
