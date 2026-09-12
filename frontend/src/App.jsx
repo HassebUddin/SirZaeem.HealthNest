@@ -12,8 +12,6 @@ import Contact from './pages/Contact'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import DoctorSearch from './pages/DoctorSearch'
-import DoctorDashboard from './pages/DoctorDashboard'
-import PatientDashboard from './pages/PatientDashboard'
 import SymptomChecker from './pages/SymptomChecker'
 import AdminDashboard from './pages/AdminDashboard'
 import AdminDoctors from './pages/AdminDoctors'
@@ -21,6 +19,13 @@ import AdminPatients from './pages/AdminPatients'
 import AdminAppointments from './pages/AdminAppointments'
 import AdminAnalytics from './pages/AdminAnalytics'
 import AdminSettings from './pages/AdminSettings'
+import DoctorOverview from './pages/DoctorOverview'
+import DoctorProfile from './pages/DoctorProfile'
+import DoctorSlots from './pages/DoctorSlots'
+import DoctorQueue from './pages/DoctorQueue'
+import DoctorAppointments from './pages/DoctorAppointments'
+import PatientOverview from './pages/PatientOverview'
+import PatientAppointments from './pages/PatientAppointments'
 
 const DASHBOARD_PATHS = ['/admin', '/doctor', '/patient']
 
@@ -102,7 +107,39 @@ function AnimatedRoutes() {
           path="/doctor"
           element={
             <ProtectedRoute role="Doctor">
-              <DoctorDashboard />
+              <DoctorOverview />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/doctor/profile"
+          element={
+            <ProtectedRoute role="Doctor">
+              <DoctorProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/doctor/slots"
+          element={
+            <ProtectedRoute role="Doctor">
+              <DoctorSlots />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/doctor/queue"
+          element={
+            <ProtectedRoute role="Doctor">
+              <DoctorQueue />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/doctor/appointments"
+          element={
+            <ProtectedRoute role="Doctor">
+              <DoctorAppointments />
             </ProtectedRoute>
           }
         />
@@ -110,7 +147,15 @@ function AnimatedRoutes() {
           path="/patient"
           element={
             <ProtectedRoute role="Patient">
-              <PatientDashboard />
+              <PatientOverview />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/patient/appointments"
+          element={
+            <ProtectedRoute role="Patient">
+              <PatientAppointments />
             </ProtectedRoute>
           }
         />

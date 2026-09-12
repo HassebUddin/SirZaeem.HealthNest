@@ -27,7 +27,7 @@ export default function Contact() {
         <div className="contact-grid">
           <motion.div className="contact-info" initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
             <div className="contact-image">
-              <img src="https://images.unsplash.com/photo-1631563019676-dade0dbdb8fc?q=80&w=800&auto=format&fit=crop" alt="Support team" loading="lazy" />
+              <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=800&auto=format&fit=crop" alt="Support team" loading="lazy" />
             </div>
             <div className="contact-info-item">
               <span className="form-icon-wrap"><FaEnvelope /></span>

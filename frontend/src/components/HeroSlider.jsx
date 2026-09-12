@@ -7,7 +7,7 @@ const SLIDES = [
     tag: 'Book in seconds',
     title: 'Your health, one tap away',
     text: 'Find trusted doctors, check real-time availability, and book appointments instantly — no phone calls, no waiting rooms.',
-    image: 'https://images.unsplash.com/photo-1622253692010-333f2da6031d?q=80&w=1800&auto=format&fit=crop'
+    image: 'https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=1800&auto=format&fit=crop'
   },
   {
     tag: 'AI Powered',
