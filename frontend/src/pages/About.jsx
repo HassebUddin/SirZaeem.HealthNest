@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion'
-import { FaBullseye, FaEye, FaUsers } from 'react-icons/fa6'
+import { FaBullseye, FaEye, FaUsers, FaLinkedinIn } from 'react-icons/fa6'
 import { photoForDoctor } from '../utils/doctorPhotos'
+import daniyalAvatar from '../assets/daniyal.png'
+import haseebAvatar from '../assets/haseeb.jpg'
 
 const VALUES = [
   {
@@ -21,10 +23,18 @@ const VALUES = [
 ]
 
 const TEAM = [
-  { name: 'Zaeem Abbas', role: 'Founder & Product Lead' },
-  { name: 'Hasseb Uddin', role: 'Lead Engineer' },
-  { name: 'Ayesha Malik', role: 'Design Lead' },
-  { name: 'Usman Tariq', role: 'Operations' }
+  {
+    name: 'Haseeb Uddin',
+    role: 'Senior Software Engineer (.NET / React)',
+    image: haseebAvatar,
+    linkedin: 'https://www.linkedin.com/in/haseeb-uddin-5594042a7/'
+  },
+  {
+    name: 'Daniyal Ahmed',
+    role: 'Full Stack Developer | CS Student',
+    image: daniyalAvatar,
+    linkedin: 'https://www.linkedin.com/in/daniyalahmedcs/'
+  }
 ]
 
 export default function About() {
@@ -121,7 +131,7 @@ export default function About() {
           <span className="eyebrow"><FaUsers /> The people behind it</span>
           <h2>Our Team</h2>
         </div>
-        <div className="team-grid">
+        <div className="team-grid" style={{ maxWidth: 640, margin: '0 auto', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
           {TEAM.map((t, i) => (
             <motion.div
               key={t.name}
@@ -130,12 +140,35 @@ export default function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.07 }}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1.75rem 1.25rem' }}
             >
-              <div className="doctor-avatar" style={{ width: 76, height: 76, margin: '0 auto 0.85rem' }}>
-                <img src={photoForDoctor(t.name)} alt={t.name} loading="lazy" />
+              <div style={{ width: 88, height: 88, margin: '0 auto 1rem', borderRadius: '50%', overflow: 'hidden', border: '3px solid var(--border)', boxShadow: 'var(--shadow-sm)' }}>
+                <img src={t.image} alt={t.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" />
               </div>
-              <h3>{t.name}</h3>
-              <p className="doctor-spec">{t.role}</p>
+              <h3 style={{ fontSize: '1.1rem', marginBottom: '0.3rem' }}>{t.name}</h3>
+              <p className="doctor-spec" style={{ fontSize: '0.85rem', marginBottom: '0.85rem' }}>{t.role}</p>
+              {t.linkedin && (
+                <a
+                  href={t.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    fontSize: '0.82rem',
+                    fontWeight: 600,
+                    color: 'var(--primary)',
+                    textDecoration: 'none',
+                    padding: '0.35rem 0.85rem',
+                    borderRadius: '999px',
+                    background: 'var(--bg-alt)',
+                    border: '1px solid var(--border)'
+                  }}
+                >
+                  <FaLinkedinIn /> LinkedIn
+                </a>
+              )}
             </motion.div>
           ))}
         </div>

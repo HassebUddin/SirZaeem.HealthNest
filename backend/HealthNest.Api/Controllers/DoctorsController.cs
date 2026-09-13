@@ -81,9 +81,23 @@ public class DoctorsController : ControllerBase
     [HttpPost("slots")]
     public async Task<IActionResult> AddSlot(TimeSlotRequest request)
     {
+        if (request.EndTime <= request.StartTime)
+            return BadRequest("End time must be after start time.");
+
+        if (request.StartTime <= DateTime.UtcNow)
+            return BadRequest("Slot start time must be in the future.");
+
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         var profile = await _db.DoctorProfiles.FirstOrDefaultAsync(d => d.UserId == userId);
         if (profile is null) return NotFound();
+
+        var overlaps = await _db.TimeSlots.AnyAsync(t =>
+            t.DoctorProfileId == profile.Id &&
+            request.StartTime < t.EndTime &&
+            request.EndTime > t.StartTime);
+
+        if (overlaps)
+            return BadRequest("This slot overlaps with an existing slot in your schedule.");
 
         var slot = new TimeSlot
         {
@@ -99,5 +113,25 @@ public class DoctorsController : ControllerBase
         await _hub.Clients.All.SendAsync("SlotAdded", slotDto);
 
         return Ok(slotDto);
+    }
+
+    [Authorize(Roles = "Doctor")]
+    [HttpDelete("slots/{slotId}")]
+    public async Task<IActionResult> DeleteSlot(int slotId)
+    {
+        var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var profile = await _db.DoctorProfiles.FirstOrDefaultAsync(d => d.UserId == userId);
+        if (profile is null) return NotFound();
+
+        var slot = await _db.TimeSlots.FirstOrDefaultAsync(t => t.Id == slotId && t.DoctorProfileId == profile.Id);
+        if (slot is null) return NotFound("Time slot not found.");
+
+        if (slot.IsBooked)
+            return BadRequest("Cannot delete a booked time slot. Please cancel the appointment first.");
+
+        _db.TimeSlots.Remove(slot);
+        await _db.SaveChangesAsync();
+
+        return NoContent();
     }
 }

@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FaStethoscope, FaWandMagicSparkles, FaUserDoctor } from 'react-icons/fa6'
 import api from '../api/client'
 import { photoForDoctor } from '../utils/doctorPhotos'
+import { formatFee } from '../utils/currency'
+import { displayDoctorName } from '../utils/doctorName'
 
 export default function SymptomChecker() {
   const [symptoms, setSymptoms] = useState('')
@@ -88,12 +90,12 @@ export default function SymptomChecker() {
                     whileHover={{ y: -4 }}
                   >
                     <div className="doctor-photo">
-                      <img src={photoForDoctor(d.doctorProfileId)} alt={d.fullName} loading="lazy" />
+                      <img src={photoForDoctor(d.fullName || d.doctorProfileId, d.fullName)} alt={displayDoctorName(d.fullName)} loading="lazy" />
                       <span className={`plan-badge ${d.plan.toLowerCase()}`}>{d.plan}</span>
                     </div>
-                    <h3>{d.fullName}</h3>
+                    <h3>{displayDoctorName(d.fullName)}</h3>
                     <p className="doctor-spec">{d.specialization}</p>
-                    <p className="doctor-fee">Fee: ${d.consultationFee}</p>
+                    <p className="doctor-fee">Fee: {formatFee(d.consultationFee, d.plan)}</p>
                   </motion.div>
                 ))}
               </div>

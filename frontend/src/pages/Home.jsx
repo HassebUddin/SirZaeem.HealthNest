@@ -10,6 +10,9 @@ import HeroSlider from '../components/HeroSlider'
 import TiltCard from '../components/TiltCard'
 import InlineSymptomChecker from '../components/InlineSymptomChecker'
 import { photoForDoctor } from '../utils/doctorPhotos'
+import { formatFee } from '../utils/currency'
+import { displayDoctorName } from '../utils/doctorName'
+import TestimonialSlider from '../components/TestimonialSlider'
 import { useCountUp } from '../hooks/useCountUp'
 
 function CountStat({ target, decimals, suffix = '', label }) {
@@ -53,9 +56,14 @@ const FEATURES = [
 ]
 
 const TESTIMONIALS = [
-  { name: 'Ayesha Raza', role: 'Patient', text: 'I booked a cardiologist in under two minutes and got a live queue update — no more sitting around wondering when it\'s my turn.', rating: 5 },
-  { name: 'Dr. Bilal Ahmed', role: 'Dermatologist', text: 'HealthNest\'s dashboard makes managing my schedule effortless. The real-time notifications are a game changer.', rating: 5 },
-  { name: 'Sara Khan', role: 'Patient', text: 'The AI symptom checker pointed me to exactly the right specialist. Genuinely impressed by how smooth this platform is.', rating: 4 }
+  { name: 'Jalil Khan', role: 'Patient', text: 'I booked a cardiologist in under two minutes and got a live queue update — no more sitting around wondering when it\'s my turn.', rating: 5 },
+  { name: 'Sara Khan', role: 'Patient', text: 'The AI symptom checker pointed me to exactly the right specialist. Genuinely impressed by how smooth this platform is.', rating: 5 },
+  { name: 'Dr. Fatima Zahra', role: 'Neurologist', text: 'HealthNest\'s dashboard makes managing my schedule effortless. The real-time notifications are a game changer.', rating: 5 },
+  { name: 'Ali Hassan', role: 'Patient', text: 'Booking my father\'s orthopedic consultation was effortless. Live queue tracking saved us from waiting room fatigue.', rating: 5 },
+  { name: 'Dr. Hina Farooq', role: 'Gynecologist', text: 'I love how patients can check in online before arriving. It keeps my clinic organized and reduces wait times for everyone.', rating: 5 },
+  { name: 'Amna Khalid', role: 'Patient', text: 'Found a verified dermatologist on a Saturday evening without any phone calls. Truly a modern healthcare experience in Pakistan.', rating: 5 },
+  { name: 'Omar Farooqi', role: 'Patient', text: 'The online check-in gave us complete peace of mind. We arrived at the clinic exactly when our turn was called. Highly recommended!', rating: 5 },
+  { name: 'Maria Yousaf', role: 'Patient', text: 'The AI symptom checker accurately recommended a pediatrician for my daughter. The doctors here are top-tier and so compassionate.', rating: 5 }
 ]
 
 export default function Home() {
@@ -200,12 +208,12 @@ export default function Home() {
               >
                 <TiltCard className="doctor-card">
                   <div className="doctor-photo">
-                    <img src={photoForDoctor(d.doctorProfileId)} alt={d.fullName} loading="lazy" />
+                    <img src={photoForDoctor(d.fullName || d.doctorProfileId, d.fullName)} alt={displayDoctorName(d.fullName)} loading="lazy" />
                     <span className={`plan-badge ${d.plan.toLowerCase()}`}>{d.plan}</span>
                   </div>
-                  <h3>{d.fullName}</h3>
+                  <h3>{displayDoctorName(d.fullName)}</h3>
                   <p className="doctor-spec">{d.specialization}</p>
-                  <p className="doctor-fee">Fee: ${d.consultationFee}</p>
+                  <p className="doctor-fee">Fee: {formatFee(d.consultationFee, d.plan)}</p>
                 </TiltCard>
               </motion.div>
             ))}
@@ -226,45 +234,7 @@ export default function Home() {
             <h2>What people are saying</h2>
           </div>
 
-          <div className="testimonial-grid">
-            {TESTIMONIALS.map((t, i) => (
-              <motion.div
-                key={t.name}
-                className="testimonial-card"
-                initial={{ opacity: 0, y: 30, rotate: i % 2 === 0 ? -1.5 : 1.5 }}
-                whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ delay: i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                whileHover={{ y: -6, rotate: 0 }}
-              >
-                <FaQuoteLeft className="quote-icon" />
-                <p>{t.text}</p>
-                <div className="testimonial-stars">
-                  {Array.from({ length: 5 }).map((_, s) => (
-                    <motion.span
-                      key={s}
-                      initial={{ opacity: 0, scale: 0 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.1 + s * 0.05 }}
-                      style={{ display: 'inline-flex' }}
-                    >
-                      <FaStar className={s < t.rating ? 'filled' : ''} />
-                    </motion.span>
-                  ))}
-                </div>
-                <div className="testimonial-author">
-                  <span className="doctor-avatar small">
-                    <img src={photoForDoctor(t.name)} alt={t.name} loading="lazy" />
-                  </span>
-                  <div>
-                    <strong>{t.name}</strong>
-                    <span>{t.role}</span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <TestimonialSlider testimonials={TESTIMONIALS} />
         </div>
       </section>
 

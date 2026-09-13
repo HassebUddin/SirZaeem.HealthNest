@@ -7,18 +7,18 @@ public static class DataSeeder
 {
     private static readonly (string Name, string Specialization, decimal Fee, SubscriptionPlan Plan, string Bio)[] Doctors =
     [
-        ("Ahmed Khan", "Cardiologist", 50m, SubscriptionPlan.Premium, "Senior cardiologist with 15 years of experience in interventional cardiology."),
-        ("Sana Malik", "Dermatologist", 35m, SubscriptionPlan.Free, "Specialist in skin conditions, acne treatment, and cosmetic dermatology."),
-        ("Bilal Ahmed", "Neurologist", 60m, SubscriptionPlan.Premium, "Expert in treating migraines, epilepsy, and neurological disorders."),
-        ("Ayesha Raza", "Pediatrician", 30m, SubscriptionPlan.Free, "Caring pediatrician dedicated to child health and development."),
-        ("Usman Tariq", "Orthopedic", 45m, SubscriptionPlan.Free, "Orthopedic surgeon specializing in sports injuries and joint replacement."),
-        ("Hina Farooq", "Gynecologist", 40m, SubscriptionPlan.Premium, "Women's health specialist with focus on prenatal and reproductive care."),
-        ("Kamran Sheikh", "ENT Specialist", 32m, SubscriptionPlan.Free, "Ear, nose and throat specialist treating sinus and hearing issues."),
-        ("Zara Nadeem", "Psychiatrist", 55m, SubscriptionPlan.Premium, "Mental health professional specializing in anxiety and depression."),
-        ("Fahad Iqbal", "Gastroenterologist", 48m, SubscriptionPlan.Free, "Digestive health expert treating stomach and intestinal disorders."),
-        ("Mahnoor Siddiqui", "Ophthalmologist", 38m, SubscriptionPlan.Free, "Eye care specialist offering vision correction and eye disease treatment."),
-        ("Danish Malik", "Dentist", 25m, SubscriptionPlan.Premium, "General and cosmetic dentistry with a gentle, modern approach."),
-        ("Rabia Chaudhry", "General Physician", 20m, SubscriptionPlan.Free, "Family medicine doctor providing comprehensive primary care.")
+        ("Ahmed Khan", "Cardiologist", 4000m, SubscriptionPlan.Premium, "Senior cardiologist with 15 years of experience in interventional cardiology."),
+        ("Sana Malik", "Dermatologist", 3000m, SubscriptionPlan.Free, "Specialist in skin conditions, acne treatment, and cosmetic dermatology."),
+        ("Fatima Zahra", "Neurologist", 5000m, SubscriptionPlan.Premium, "Expert in treating migraines, epilepsy, and neurological disorders."),
+        ("Ayesha Raza", "Pediatrician", 2500m, SubscriptionPlan.Free, "Caring pediatrician dedicated to child health and development."),
+        ("Usman Tariq", "Orthopedic", 3500m, SubscriptionPlan.Free, "Orthopedic surgeon specializing in sports injuries and joint replacement."),
+        ("Hina Farooq", "Gynecologist", 3500m, SubscriptionPlan.Premium, "Women's health specialist with focus on prenatal and reproductive care."),
+        ("Kamran Sheikh", "ENT Specialist", 2500m, SubscriptionPlan.Free, "Ear, nose and throat specialist treating sinus and hearing issues."),
+        ("Zara Nadeem", "Psychiatrist", 4500m, SubscriptionPlan.Premium, "Mental health professional specializing in anxiety and depression."),
+        ("Fahad Iqbal", "Gastroenterologist", 3800m, SubscriptionPlan.Free, "Digestive health expert treating stomach and intestinal disorders."),
+        ("Mahnoor Siddiqui", "Ophthalmologist", 3000m, SubscriptionPlan.Free, "Eye care specialist offering vision correction and eye disease treatment."),
+        ("Danish Malik", "Dentist", 2000m, SubscriptionPlan.Premium, "General and cosmetic dentistry with a gentle, modern approach."),
+        ("Rabia Chaudhry", "General Physician", 1500m, SubscriptionPlan.Free, "Family medicine doctor providing comprehensive primary care.")
     ];
 
     private static readonly string[] PatientNames =

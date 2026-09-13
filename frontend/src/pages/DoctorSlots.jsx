@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FaClock, FaPlus, FaCircleCheck } from 'react-icons/fa6'
+import { FaClock, FaPlus, FaCircleCheck, FaTrashCan, FaTriangleExclamation } from 'react-icons/fa6'
 import api from '../api/client'
 import DashboardLayout from '../components/DashboardLayout'
 import { DOCTOR_NAV_ITEMS } from '../components/DoctorNav'
@@ -11,6 +11,7 @@ export default function DoctorSlots() {
   const [slotEnd, setSlotEnd] = useState('')
   const [slots, setSlots] = useState([])
   const [toast, setToast] = useState('')
+  const [error, setError] = useState('')
   const doctorProfileId = useDoctorProfileId()
 
   const loadSlots = async () => {
@@ -28,13 +29,42 @@ export default function DoctorSlots() {
     setTimeout(() => setToast(''), 2500)
   }
 
+  const showError = (msg) => {
+    setError(msg)
+    setTimeout(() => setError(''), 3500)
+  }
+
   const addSlot = async (e) => {
     e.preventDefault()
-    await api.post('/doctors/slots', { startTime: slotStart, endTime: slotEnd })
-    setSlotStart('')
-    setSlotEnd('')
-    showToast('Time slot added')
-    loadSlots()
+    setError('')
+    if (new Date(slotEnd) <= new Date(slotStart)) {
+      showError('End time must be after start time.')
+      return
+    }
+    if (new Date(slotStart) <= new Date()) {
+      showError('Start time must be in the future.')
+      return
+    }
+
+    try {
+      await api.post('/doctors/slots', { startTime: slotStart, endTime: slotEnd })
+      setSlotStart('')
+      setSlotEnd('')
+      showToast('Time slot added successfully!')
+      loadSlots()
+    } catch (err) {
+      showError(err.response?.data ?? 'Could not add time slot.')
+    }
+  }
+
+  const deleteSlot = async (slotId) => {
+    try {
+      await api.delete(`/doctors/slots/${slotId}`)
+      showToast('Time slot removed')
+      setSlots((prev) => prev.filter((s) => s.id !== slotId))
+    } catch (err) {
+      showError(err.response?.data ?? 'Could not remove time slot.')
+    }
   }
 
   return (
@@ -53,6 +83,17 @@ export default function DoctorSlots() {
             exit={{ opacity: 0, y: -8 }}
           >
             <FaCircleCheck /> {toast}
+          </motion.p>
+        )}
+        {error && (
+          <motion.p
+            className="error-banner"
+            style={{ padding: '0.75rem 1rem', background: '#fee2e2', color: '#991b1b', borderRadius: '8px', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+          >
+            <FaTriangleExclamation /> {error}
           </motion.p>
         )}
       </AnimatePresence>
@@ -89,7 +130,18 @@ export default function DoctorSlots() {
                   <strong>{new Date(s.startTime).toLocaleDateString()}</strong>
                   <span>{new Date(s.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - {new Date(s.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                 </div>
-                <span className={`status-pill ${s.isBooked ? 'cancelled' : 'confirmed'}`}>{s.isBooked ? 'Booked' : 'Open'}</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span className={`status-pill ${s.isBooked ? 'cancelled' : 'confirmed'}`}>{s.isBooked ? 'Booked' : 'Open'}</span>
+                  {!s.isBooked && (
+                    <button
+                      onClick={() => deleteSlot(s.id)}
+                      title="Remove Slot"
+                      style={{ background: 'transparent', border: 'none', color: '#dc2626', cursor: 'pointer', padding: '0.25rem' }}
+                    >
+                      <FaTrashCan />
+                    </button>
+                  )}
+                </div>
               </div>
             ))}
           </div>

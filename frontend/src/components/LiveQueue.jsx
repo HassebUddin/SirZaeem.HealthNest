@@ -14,25 +14,35 @@ export function PatientQueueStatus({ appointmentId }) {
       const { data } = await api.get(`/queue/status/${appointmentId}`)
       setStatus(data)
       setCheckedIn(true)
+      if (connection && data.doctorProfileId) {
+        connection.invoke('JoinQueueGroup', String(data.doctorProfileId)).catch(() => {})
+      }
     } catch {
       setCheckedIn(false)
+      setStatus(null)
     }
   }
 
   useEffect(() => {
     loadStatus()
-  }, [appointmentId])
+  }, [appointmentId, connection])
 
   useEffect(() => {
     if (!connection) return
     const handler = () => loadStatus()
     connection.on('QueueUpdated', handler)
-    return () => connection.off('QueueUpdated', handler)
-  }, [connection])
+    connection.on('AppointmentStatusChanged', (id) => {
+      if (id === appointmentId) loadStatus()
+    })
+    return () => {
+      connection.off('QueueUpdated', handler)
+      connection.off('AppointmentStatusChanged')
+    }
+  }, [connection, appointmentId])
 
   const checkIn = async () => {
     await api.post(`/queue/check-in/${appointmentId}`)
-    loadStatus()
+    await loadStatus()
   }
 
   if (!checkedIn) {

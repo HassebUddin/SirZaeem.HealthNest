@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FaHeartPulse, FaMoon, FaSun } from 'react-icons/fa6'
+import { FaHeartPulse } from 'react-icons/fa6'
 import { FaBars, FaTimes } from 'react-icons/fa'
 import { useAuth } from '../context/AuthContext'
-import { useTheme } from '../context/ThemeContext'
 
 const LINKS = [
   { to: '/', label: 'Home', end: true },
@@ -16,7 +15,6 @@ const LINKS = [
 
 export default function PublicNavbar() {
   const { user } = useAuth()
-  const { theme, toggleTheme } = useTheme()
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
 
@@ -36,17 +34,13 @@ export default function PublicNavbar() {
           </NavLink>
         ))}
 
-        <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
-          {theme === 'dark' ? <FaSun /> : <FaMoon />}
-        </button>
-
         {!user ? (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/register" className="active">Get Started</Link>
+            <Link to="/login" className="nav-btn-login">Login</Link>
+            <Link to="/register" className="nav-btn-cta">Get Started</Link>
           </>
         ) : (
-          <button onClick={() => navigate(dashboardPath)}>Go to Dashboard</button>
+          <button className="nav-btn-cta" onClick={() => navigate(dashboardPath)}>Go to Dashboard</button>
         )}
       </div>
 
@@ -69,16 +63,13 @@ export default function PublicNavbar() {
                 {l.label}
               </NavLink>
             ))}
-            <button className="theme-toggle mobile-theme-toggle" onClick={toggleTheme}>
-              {theme === 'dark' ? <><FaSun /> Light Mode</> : <><FaMoon /> Dark Mode</>}
-            </button>
             {!user ? (
               <>
                 <Link to="/login" onClick={() => setOpen(false)}>Login</Link>
-                <Link to="/register" className="active" onClick={() => setOpen(false)}>Get Started</Link>
+                <Link to="/register" className="nav-btn-cta mobile-nav-cta" onClick={() => setOpen(false)}>Get Started</Link>
               </>
             ) : (
-              <button onClick={() => { setOpen(false); navigate(dashboardPath) }}>Go to Dashboard</button>
+              <button className="nav-btn-cta mobile-nav-cta" onClick={() => { setOpen(false); navigate(dashboardPath) }}>Go to Dashboard</button>
             )}
           </motion.div>
         )}

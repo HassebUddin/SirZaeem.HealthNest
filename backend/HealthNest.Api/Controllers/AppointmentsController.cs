@@ -75,6 +75,8 @@ public class AppointmentsController : ControllerBase
 
         await _hub.Clients.Group($"doctor-{slot.DoctorProfileId}")
             .SendAsync("NewAppointment", appointmentDto);
+        await _hub.Clients.Group($"doctor-user-{slot.DoctorProfile.UserId}")
+            .SendAsync("NewAppointment", appointmentDto);
 
         await _hub.Clients.All.SendAsync("SlotBooked", slot.Id);
 
@@ -118,11 +120,14 @@ public class AppointmentsController : ControllerBase
     public async Task<IActionResult> UpdateStatus(int id, [FromBody] AppointmentStatus status)
     {
         var appointment = await _db.Appointments
-            .Include(a => a.TimeSlot)
+            .Include(a => a.TimeSlot)!.ThenInclude(t => t!.DoctorProfile)
             .Include(a => a.Patient)
             .FirstOrDefaultAsync(a => a.Id == id);
 
         if (appointment is null) return NotFound("Appointment not found.");
+
+        if (appointment.TimeSlot?.DoctorProfile?.UserId != CurrentUserId)
+            return Forbid("You can only update your own appointments.");
 
         appointment.Status = status;
         if (status == AppointmentStatus.Cancelled)

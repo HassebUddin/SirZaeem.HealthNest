@@ -4,6 +4,7 @@ import { FaCalendarCheck, FaCircleCheck } from 'react-icons/fa6'
 import api from '../api/client'
 import { useAuth } from '../context/AuthContext'
 import { useSignalR } from '../context/SignalRContext'
+import { useDoctorProfileId } from '../hooks/useDoctorProfile'
 import DashboardLayout from '../components/DashboardLayout'
 import { DOCTOR_NAV_ITEMS } from '../components/DoctorNav'
 
@@ -17,6 +18,7 @@ export default function DoctorAppointments() {
   const [error, setError] = useState('')
   const { user } = useAuth()
   const connection = useSignalR()
+  const doctorProfileId = useDoctorProfileId()
 
   const loadAppointments = async () => {
     const { data } = await api.get('/appointments/doctor')
@@ -30,13 +32,17 @@ export default function DoctorAppointments() {
 
   useEffect(() => {
     if (!connection || !user) return
-    connection.invoke('JoinDoctorGroup', String(user.userId))
+    if (doctorProfileId) {
+      connection.invoke('JoinDoctorGroup', String(doctorProfileId)).catch(() => {})
+    }
+    connection.invoke('JoinDoctorGroup', String(user.userId)).catch(() => {})
+
     connection.on('NewAppointment', (appointment) => {
       setAppointments((prev) => [...prev, appointment])
       showToast(`New appointment booked by ${appointment.patientName}`)
     })
     return () => connection.off('NewAppointment')
-  }, [connection, user])
+  }, [connection, user, doctorProfileId])
 
   const showToast = (msg) => {
     setToast(msg)

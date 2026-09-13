@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FaXmark, FaHeartPulse, FaGraduationCap, FaLinkedinIn, FaBuilding } from 'react-icons/fa6'
 import { FaUserGraduate } from 'react-icons/fa'
 import { LOGICOSE_LOGO } from '../assets/logicoseLogo'
+import daniyalAvatar from '../assets/daniyal.png'
+import haseebAvatar from '../assets/haseeb.jpg'
 
 const SUPERVISOR = {
   name: 'Sir Zaeem Tariq',
@@ -19,14 +21,15 @@ const TEAM = [
     detail: 'Senior Software Engineer (.NET / React)',
     company: 'Logicose Pvt Ltd',
     companyLogo: LOGICOSE_LOGO,
-    image: 'https://scontent-ams2-1.cdninstagram.com/v/t51.82787-19/753282262_17898099765516129_6817168787032967633_n.jpg?stp=dst-jpg_s150x150_tt6&_nc_cat=100&ccb=7-5&_nc_sid=f7ccc5&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy45OTIuQzMifQ%3D%3D&_nc_ohc=GFrriF4IWqoQ7kNvwEOJL4A&_nc_oc=AdoaGmXMvcIl-nLIr5TvKUvYaCGDIjkZgJhwDwcWwYOWLuaUKIJreBRBTdLUo389UUw&_nc_zt=24&_nc_ht=scontent-ams2-1.cdninstagram.com&_nc_gid=3trgi2F75Jbsqrmk6SBNAQ&_nc_ss=7baaf&oh=00_AQLe_92nNqsrOZrcMvfRSWceriKg-acyKIxAhtojfF7kRA&oe=6AAB8866',
+    image: haseebAvatar,
     linkedin: 'https://www.linkedin.com/in/haseeb-uddin-5594042a7/'
   },
   {
     name: 'Daniyal Ahmed',
     id: 'B22110006024',
-    detail: 'Student at UBIT',
-    image: null
+    detail: 'Full Stack Developer | CS Student',
+    image: daniyalAvatar,
+    linkedin: 'https://www.linkedin.com/in/daniyalahmedcs/'
   }
 ]
 

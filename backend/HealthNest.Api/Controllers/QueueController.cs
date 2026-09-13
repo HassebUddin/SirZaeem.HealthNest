@@ -72,7 +72,7 @@ public class QueueController : ControllerBase
         if (entry is null) return NotFound();
 
         var peopleAhead = entry.Position - 1;
-        return Ok(new QueueStatusDto(appointmentId, entry.Position, peopleAhead, peopleAhead * AverageConsultationMinutes));
+        return Ok(new QueueStatusDto(appointmentId, entry.Position, peopleAhead, peopleAhead * AverageConsultationMinutes, appointment.TimeSlot!.DoctorProfileId));
     }
 
     [Authorize(Roles = "Doctor")]
@@ -125,5 +125,16 @@ public class QueueController : ControllerBase
 
         await _hub.Clients.Group($"queue-{doctorProfileId}").SendAsync("QueueUpdated", queue);
         await _hub.Clients.Group($"doctor-{doctorProfileId}").SendAsync("QueueUpdated", queue);
+
+        var checkedInPatientIds = await _db.Appointments
+            .Where(a => a.TimeSlot!.DoctorProfileId == doctorProfileId && a.CheckedIn && a.Status == AppointmentStatus.Confirmed)
+            .Select(a => a.PatientId)
+            .Distinct()
+            .ToListAsync();
+
+        foreach (var pid in checkedInPatientIds)
+        {
+            await _hub.Clients.Group($"patient-{pid}").SendAsync("QueueUpdated");
+        }
     }
 }

@@ -23,6 +23,9 @@ public class AuthController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request)
     {
+        if (request.Role == UserRole.Admin)
+            return BadRequest("Registration for Administrator role is not permitted.");
+
         if (await _db.Users.AnyAsync(u => u.Email == request.Email))
             return BadRequest("Email already registered.");
 

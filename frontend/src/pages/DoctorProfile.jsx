@@ -55,12 +55,14 @@ export default function DoctorProfile() {
             </div>
           </div>
           <div className="field">
-            <label>Consultation Fee ($)</label>
+            <label>Consultation Fee (PKR)</label>
             <div className="input-group">
               <FaSackDollar />
               <input
                 type="number"
-                placeholder="50"
+                placeholder="2500"
+                min="1000"
+                max="5000"
                 value={profile.consultationFee}
                 onChange={(e) => setProfile({ ...profile, consultationFee: parseFloat(e.target.value) })}
               />

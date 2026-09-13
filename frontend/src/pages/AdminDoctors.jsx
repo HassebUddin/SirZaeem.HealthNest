@@ -8,6 +8,8 @@ import api from '../api/client'
 import DashboardLayout from '../components/DashboardLayout'
 import { ADMIN_NAV_ITEMS } from '../components/AdminNav'
 import { photoForDoctor } from '../utils/doctorPhotos'
+import { formatFee } from '../utils/currency'
+import { displayDoctorName } from '../utils/doctorName'
 
 const EMPTY_FORM = {
   fullName: '',
@@ -133,14 +135,14 @@ export default function AdminDoctors() {
                   <FaTrash />
                 </button>
                 <div className="doctor-photo">
-                  <img src={photoForDoctor(d.doctorProfileId)} alt={d.fullName} loading="lazy" />
+                  <img src={photoForDoctor(d.fullName || d.doctorProfileId, d.fullName)} alt={displayDoctorName(d.fullName)} loading="lazy" />
                   <span className={`plan-badge ${d.plan.toLowerCase()}`}>{d.plan}</span>
                 </div>
-                <h3>{d.fullName}</h3>
+                <h3>{displayDoctorName(d.fullName)}</h3>
                 <p className="doctor-spec">{d.specialization}</p>
                 <p className="doctor-fee">{d.email}</p>
                 <div className="admin-doctor-meta">
-                  <span>Fee: ${d.consultationFee}</span>
+                  <span>Fee: {formatFee(d.consultationFee, d.plan)}</span>
                   <span>{d.totalAppointments} appointments</span>
                 </div>
               </motion.div>
@@ -222,12 +224,14 @@ export default function AdminDoctors() {
                     </div>
                   </div>
                   <div className="field">
-                    <label>Consultation Fee ($)</label>
+                    <label>Consultation Fee (PKR)</label>
                     <div className="input-group">
                       <FaSackDollar />
                       <input
                         type="number"
-                        placeholder="50"
+                        placeholder="2500"
+                        min="1000"
+                        max="5000"
                         value={form.consultationFee}
                         onChange={(e) => setForm({ ...form, consultationFee: e.target.value })}
                         required

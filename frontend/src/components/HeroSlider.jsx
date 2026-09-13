@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 
 const SLIDES = [
   {
@@ -63,14 +62,11 @@ export default function HeroSlider({ children }) {
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
-    const timer = setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), 5000)
+    const timer = setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), 8000)
     return () => clearInterval(timer)
   }, [])
 
   const slide = SLIDES[index]
-
-  const next = () => setIndex((i) => (i + 1) % SLIDES.length)
-  const prev = () => setIndex((i) => (i - 1 + SLIDES.length) % SLIDES.length)
 
   return (
     <div className="hero-slider">
@@ -124,9 +120,6 @@ export default function HeroSlider({ children }) {
           </div>
         </motion.div>
       </AnimatePresence>
-
-      <button className="hero-slider-arrow left" onClick={prev} aria-label="Previous slide"><FaChevronLeft /></button>
-      <button className="hero-slider-arrow right" onClick={next} aria-label="Next slide"><FaChevronRight /></button>
 
       <div className="hero-slider-dots">
         {SLIDES.map((_, i) => (

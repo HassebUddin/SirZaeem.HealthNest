@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaUserDoctor, FaCircleCheck, FaClock, FaStethoscope, FaShieldHeart, FaBolt, FaXmark } from 'react-icons/fa6'
 import { FaSearch } from 'react-icons/fa'
 import api from '../api/client'
+import { useAuth } from '../context/AuthContext'
 import { useSignalR } from '../context/SignalRContext'
 import { photoForDoctor } from '../utils/doctorPhotos'
+import { formatFee } from '../utils/currency'
+import { displayDoctorName } from '../utils/doctorName'
 
 const FILTERS = ['All', 'Available', 'Booked']
 
@@ -14,8 +18,10 @@ export default function DoctorSearch() {
   const [selectedDoctor, setSelectedDoctor] = useState(null)
   const [slots, setSlots] = useState([])
   const [message, setMessage] = useState('')
+  const [authNeeded, setAuthNeeded] = useState(false)
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('All')
+  const { user } = useAuth()
   const connection = useSignalR()
 
   const loadDoctors = async () => {
@@ -55,10 +61,24 @@ export default function DoctorSearch() {
     setSelectedDoctor(null)
     setSlots([])
     setMessage('')
+    setAuthNeeded(false)
   }
 
   const book = async (slotId) => {
     setMessage('')
+    setAuthNeeded(false)
+
+    if (!user) {
+      setMessage('Please log in or register as a patient to book this appointment.')
+      setAuthNeeded(true)
+      return
+    }
+
+    if (user.role !== 'Patient') {
+      setMessage('Only patient accounts can book appointments.')
+      return
+    }
+
     try {
       await api.post('/appointments/book', { timeSlotId: slotId })
       setMessage('Appointment booked successfully!')
@@ -131,12 +151,12 @@ export default function DoctorSearch() {
                 whileHover={{ y: -4 }}
               >
                 <div className="doctor-photo">
-                  <img src={photoForDoctor(d.doctorProfileId)} alt={d.fullName} loading="lazy" />
+                  <img src={photoForDoctor(d.fullName || d.doctorProfileId, d.fullName)} alt={displayDoctorName(d.fullName)} loading="lazy" />
                   <span className={`plan-badge ${d.plan.toLowerCase()}`}>{d.plan}</span>
                 </div>
-                <h3>{d.fullName}</h3>
+                <h3>{displayDoctorName(d.fullName)}</h3>
                 <p className="doctor-spec">{d.specialization}</p>
-                <p className="doctor-fee">Consultation Fee: ${d.consultationFee}</p>
+                <p className="doctor-fee">Consultation Fee: {formatFee(d.consultationFee, d.plan)}</p>
               </motion.div>
             ))}
           </AnimatePresence>
@@ -163,18 +183,30 @@ export default function DoctorSearch() {
               <button className="modal-close" onClick={closeModal} aria-label="Close"><FaXmark /></button>
 
               <div className="modal-doctor-header">
-                <img src={photoForDoctor(selectedDoctor.doctorProfileId)} alt={selectedDoctor.fullName} className="modal-doctor-photo" />
+                <img src={photoForDoctor(selectedDoctor.fullName || selectedDoctor.doctorProfileId, selectedDoctor.fullName)} alt={displayDoctorName(selectedDoctor.fullName)} className="modal-doctor-photo" />
                 <div>
-                  <h3>{selectedDoctor.fullName}</h3>
+                  <h3>{displayDoctorName(selectedDoctor.fullName)}</h3>
                   <p className="doctor-spec">{selectedDoctor.specialization}</p>
                   <span className={`plan-badge ${selectedDoctor.plan.toLowerCase()}`}>{selectedDoctor.plan}</span>
                 </div>
               </div>
 
               {message && (
-                <p className={message.includes('success') ? 'success-banner' : 'error-text'}>
-                  {message.includes('success') && <FaCircleCheck />} {message}
-                </p>
+                <div style={{ marginBottom: '1rem' }}>
+                  <p className={message.includes('success') ? 'success-banner' : 'error-text'}>
+                    {message.includes('success') && <FaCircleCheck />} {message}
+                  </p>
+                  {authNeeded && (
+                    <div style={{ display: 'flex', gap: '0.75rem', marginTop: '0.6rem' }}>
+                      <Link to="/login" className="btn-primary" style={{ padding: '0.45rem 1rem', fontSize: '0.9rem' }}>
+                        Log In Now
+                      </Link>
+                      <Link to="/register" className="btn-secondary" style={{ padding: '0.45rem 1rem', fontSize: '0.9rem' }}>
+                        Create Account
+                      </Link>
+                    </div>
+                  )}
+                </div>
               )}
 
               <div className="filter-tabs">

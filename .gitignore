@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+
+# Build outputs
+dist/
+frontend/dist/
+bin/
+obj/
+backend/**/bin/
+backend/**/obj/
+
+# Visual Studio / IDE
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+
+# Environment & Logs
+*.log
+.env.local
+.env.*.local
+
+# OS Files
+.DS_Store
+Thumbs.db
