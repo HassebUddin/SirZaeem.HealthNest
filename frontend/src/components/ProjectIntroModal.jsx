@@ -26,7 +26,7 @@ const TEAM = [
   },
   {
     name: 'Daniyal Ahmed',
-    id: 'B22110006024',
+    id: 'B21110006024',
     detail: 'Full Stack Developer | CS Student',
     image: daniyalAvatar,
     linkedin: 'https://www.linkedin.com/in/daniyalahmedcs/'
