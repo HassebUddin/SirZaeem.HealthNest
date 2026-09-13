@@ -186,6 +186,19 @@ Since browsers can't set custom headers during the WebSocket handshake, the JWT 
 | **Doctor** | Manage their profile and time slots, view/manage appointments, run the live queue |
 | **Admin** | Manage doctors and patients, view/manage all appointments, view analytics dashboards |
 
+### Demo Accounts
+
+Pre-seeded accounts are available for testing all role-based features (see full details in [`DEMO_USERS.md`](./DEMO_USERS.md)):
+
+| Role | Name | Email | Password |
+|---|---|---|---|
+| **Admin** | Platform Admin | `admin@healthnest.app` | `Admin@123` |
+| **Doctor** | Dr. Fatima Zahra (Neurologist) | `fatima.zahra@healthnest.app` | `Doctor@123` |
+| **Doctor** | Dr. Ahmed Khan (Cardiologist) | `ahmed.khan@healthnest.app` | `Doctor@123` |
+| **Doctor** | Dr. Sana Malik (Dermatologist) | `sana.malik@healthnest.app` | `Doctor@123` |
+| **Patient** | Ali Hassan | `ali.hassan@example.com` | `Patient@123` |
+| **Patient** | Fatima Sheikh | `fatima.sheikh@example.com` | `Patient@123` |
+
 ## Deployment
 
 The backend and frontend are deployed independently:
